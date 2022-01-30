@@ -3,6 +3,7 @@ package com.programmergwin.valwithorphans;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -68,9 +69,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 || TextUtils.isEmpty(totalDonationAmount.getText())|| TextUtils.isEmpty(totalDonationTarget.getText()))
             Toast.makeText(this, "One or more text is empty.", Toast.LENGTH_SHORT).show();
         else {
-            PaymentSummaryModel paymentSummaryModel = new PaymentSummaryModel(educationPercentage.getText().toString(),
-                    foodPercentage.getText().toString(), shelterPercentage.getText().toString(), fundPercentage.getText().toString(),
-                    totalDonationAmount.getText().toString(), totalDonationTarget.getText().toString());
+            PaymentSummaryModel paymentSummaryModel = new PaymentSummaryModel(educationPercentage.getText().toString().trim(),
+                    foodPercentage.getText().toString().trim(), shelterPercentage.getText().toString().trim(), fundPercentage.getText().toString().trim(),
+                    totalDonationAmount.getText().toString().trim(), totalDonationTarget.getText().toString().trim());
             WriteToPaymentSummaryDB(paymentSummaryModel);
         }
     }
@@ -78,13 +79,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void WriteToPaymentSummaryDB(PaymentSummaryModel paymentSummaryModel){
         try {
             showProgressDialog(true);
+            paymentSummaryModel.TotalDonationTarget = getAmountWithComma(paymentSummaryModel.TotalDonationTarget);
+            paymentSummaryModel.TotalDonationAmount = getAmountWithComma(paymentSummaryModel.TotalDonationAmount);
             paymentSummaryRef.setValue(paymentSummaryModel);
             showProgressDialog(false);
             showDialog("Success", "Payment Summary Updated Successfully");
         }catch (Exception e){
             e.printStackTrace();
+            showProgressDialog(false);
             showDialog("Error", e.getMessage());
         }
+    }
+
+    @SuppressLint("DefaultLocale")
+    private String getAmountWithComma(String totalDonationTarget) {
+       return String.format("% ,d", Integer.parseInt(totalDonationTarget)).trim();
     }
 
     void showDialog(String Title, String Message){
@@ -140,29 +149,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
-
-    /*private void addInitialDataToFirebase() {
-        mDatabase =  FirebaseDatabase.getInstance().getReference();
-        journalCloudEndPoint = mDatabase.child("journalentris");
-        journalCloudEndPoint.setValue("Hello World");
-
-        List<JournalEntry> sampleJournalEntries =
-                SampleData.getSampleJournalEntries();
-        for (JournalEntry journalEntry: sampleJournalEntries){
-            String key = journalCloudEndPoint.push().getKey();
-            journalEntry.setJournalId(key);
-            journalCloudEndPoint.child(key).setValue(journalEntry);
-        }
-
-        List<String> tagNames = SampleData.getSampleTags();
-        for (String name: tagNames){
-            String tagKey = tagCloudEndPoint.push().getKey();
-            Tag tag = new Tag();
-            tag.setTagName(name);
-            tag.setTagId(tagKey);
-            tagCloudEndPoint.child(tag.getTagId()).setValue(category);
-        }
-
-    }*/
 
 }

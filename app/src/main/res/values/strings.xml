@@ -9,4 +9,5 @@
     <string name="shelter_percentage">Shelter Percentage</string>
     <string name="education_percentage">Education Percentage</string>
     <string name="donation_target">Donation Target</string>
+    <string name="update_record">UPDATE RECORD</string>
 </resources>

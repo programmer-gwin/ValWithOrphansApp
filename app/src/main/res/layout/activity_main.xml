@@ -148,7 +148,7 @@
                 android:id="@+id/btnUpdateRecord"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="UPDATE RECORD" />
+                android:text="@string/update_record" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
