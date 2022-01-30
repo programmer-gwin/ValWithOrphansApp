@@ -8,6 +8,9 @@ public class PaymentSummaryModel {
     public String TotalDonationAmount;
     public String TotalDonationTarget;
 
+    public PaymentSummaryModel() {
+    }
+
     public PaymentSummaryModel(String educationPercentage, String foodPercentage, String shelterPercentage, String fundPercentage, String totalDonationAmount, String totalDonationTarget) {
         EducationPercentage = educationPercentage;
         FoodPercentage = foodPercentage;

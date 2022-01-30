@@ -1,15 +1,18 @@
 package com.programmergwin.valwithorphans;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     FirebaseDatabase database;
     DatabaseReference paymentSummaryRef;
+
+    ProgressDialog progressDialog;
 
     Button btnUpdateRecord;
     TextView educationPercentage,  foodPercentage,  shelterPercentage,  fundPercentage,  totalDonationAmount,  totalDonationTarget;
@@ -54,51 +59,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        PaymentSummaryModel paymentSummaryModel = new PaymentSummaryModel(educationPercentage.getText().toString(),
-                foodPercentage.getText().toString(), shelterPercentage.getText().toString(), fundPercentage.getText().toString(),
-                totalDonationAmount.getText().toString(), totalDonationTarget.getText().toString());
-        WriteToPaymentSummaryDB(paymentSummaryModel);
+        PerformPaymentSummaryUpdate();
+    }
+
+    private void PerformPaymentSummaryUpdate() {
+        if(TextUtils.isEmpty(educationPercentage.getText()) || TextUtils.isEmpty(foodPercentage.getText())
+                || TextUtils.isEmpty(shelterPercentage.getText()) || TextUtils.isEmpty(fundPercentage.getText())
+                || TextUtils.isEmpty(totalDonationAmount.getText())|| TextUtils.isEmpty(totalDonationTarget.getText()))
+            Toast.makeText(this, "One or more text is empty.", Toast.LENGTH_SHORT).show();
+        else {
+            PaymentSummaryModel paymentSummaryModel = new PaymentSummaryModel(educationPercentage.getText().toString(),
+                    foodPercentage.getText().toString(), shelterPercentage.getText().toString(), fundPercentage.getText().toString(),
+                    totalDonationAmount.getText().toString(), totalDonationTarget.getText().toString());
+            WriteToPaymentSummaryDB(paymentSummaryModel);
+        }
     }
 
     private void WriteToPaymentSummaryDB(PaymentSummaryModel paymentSummaryModel){
         try {
-            showDialog();
+            showProgressDialog(true);
             paymentSummaryRef.setValue(paymentSummaryModel);
+            showProgressDialog(false);
+            showDialog("Success", "Payment Summary Updated Successfully");
         }catch (Exception e){
             e.printStackTrace();
+            showDialog("Error", e.getMessage());
         }
     }
 
-    void showDialog(){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (!isFinishing()){
-                    new AlertDialog.Builder(MainActivity.this)
-                            .setTitle("Your Alert")
-                            .setMessage("Your Message")
-                            .setCancelable(false)
-                            .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface  dialog, int which) {
-                                    // Whatever...
-                                }
-                            }).show();
-                }
+    void showDialog(String Title, String Message){
+        runOnUiThread(() -> {
+            if (!isFinishing()){
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle(Title).setMessage(Message).setCancelable(false)
+                        .setPositiveButton("OK", (dialog, which) -> readFromDB()).show();
             }
         });
     }
 
     void showProgressDialog(boolean status){
-        //setIndeterminate(true).
-         ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", status);
+        if(status)
+            progressDialog = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", status);
+        else
+            progressDialog.cancel();
     }
 
     void readFromDB(){
+        showProgressDialog(true);
         // Read from the database
         paymentSummaryRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 try{
@@ -114,8 +125,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }else{
                         Log.d("TAG", "Failed to deserialize value.");
                     }
+                    showProgressDialog(false);
                 }catch (Exception ex){
                     Log.d("TAG", "Failed to read value."+ ex.getMessage());
+                    showProgressDialog(false);
                 }
             }
 
@@ -123,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
                 Log.w("TAG", "Failed to read value.", error.toException());
+                showProgressDialog(false);
             }
         });
     }

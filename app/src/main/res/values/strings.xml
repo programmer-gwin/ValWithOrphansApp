@@ -6,10 +6,7 @@
     <string name="fund_percentage">Fund Percentage</string>
     <string name="_00">00</string>
     <string name="food_percentage">Food Percentage</string>
-    <string name="_00">00</string>
     <string name="shelter_percentage">Shelter Percentage</string>
-    <string name="_00">00</string>
     <string name="education_percentage">Education Percentage</string>
-    <string name="_00">00</string>
     <string name="donation_target">Donation Target</string>
 </resources>
