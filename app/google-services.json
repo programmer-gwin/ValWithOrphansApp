@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "934499208463",
+    "firebase_url": "https://valwithorphans-default-rtdb.firebaseio.com",
+    "project_id": "valwithorphans",
+    "storage_bucket": "valwithorphans.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:934499208463:android:23f64cfa8582e10f9e427a",
+        "android_client_info": {
+          "package_name": "com.programmergwin.valwithorphans"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "934499208463-v06b9pfhs65606add10tih2lc5od40ab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2A4w7i5BBc84KsXi5exk7A7wa9U0-eak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "934499208463-v06b9pfhs65606add10tih2lc5od40ab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

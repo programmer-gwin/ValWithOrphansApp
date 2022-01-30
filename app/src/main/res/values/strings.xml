@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">ValWithOrphans</string>
+    <string name="total_donation_received">Total Donation Received</string>
+    <string name="_10000">10000</string>
+    <string name="_100000">100000</string>
+    <string name="fund_percentage">Fund Percentage</string>
+    <string name="_00">00</string>
+    <string name="food_percentage">Food Percentage</string>
+    <string name="_00">00</string>
+    <string name="shelter_percentage">Shelter Percentage</string>
+    <string name="_00">00</string>
+    <string name="education_percentage">Education Percentage</string>
+    <string name="_00">00</string>
+    <string name="donation_target">Donation Target</string>
+</resources>
